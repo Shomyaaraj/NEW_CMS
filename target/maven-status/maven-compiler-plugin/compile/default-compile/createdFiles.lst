@@ -1,0 +1,7 @@
+com\news\cms\dao\ArticleDAO.class
+com\news\cms\model\Article.class
+com\news\cms\model\User.class
+com\news\cms\dao\UserDAO.class
+com\news\cms\action\ArticleAction.class
+com\news\cms\action\LoginAction.class
+com\news\cms\dao\DatabaseUtil.class

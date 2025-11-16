@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+        <action name="login" class="com.news.cms.action.LoginAction">
+            <result name="success">/WEB-INF/jsp/dashboard.jsp</result>
+            <result name="input">/WEB-INF/jsp/login.jsp</result>
+        </action>
+        <action name="login!input" class="com.news.cms.action.LoginAction" method="input">
+            <result name="success">/WEB-INF/jsp/login.jsp</result>
+        </action>
+
+        <action name="logout" class="com.news.cms.action.LoginAction" method="logout">
+            <result name="success">/WEB-INF/jsp/login.jsp</result>
+        </action>
+
+        <action name="articleList" class="com.news.cms.action.ArticleAction" method="list">
+            <result name="success">/WEB-INF/jsp/articleList.jsp</result>
+        </action>
+
+        <action name="articleCreate" class="com.news.cms.action.ArticleAction" method="create">
+            <result name="success">/WEB-INF/jsp/articleForm.jsp</result>
+        </action>
+
+        <action name="articleSave" class="com.news.cms.action.ArticleAction" method="save">
+            <result name="success" type="redirectAction">articleList</result>
+            <result name="input">/WEB-INF/jsp/articleForm.jsp</result>
+        </action>
+
+        <action name="articleEdit" class="com.news.cms.action.ArticleAction" method="edit">
+            <result name="success">/WEB-INF/jsp/articleForm.jsp</result>
+        </action>
+
+        <action name="articlePublish" class="com.news.cms.action.ArticleAction" method="publish">
+            <result name="success" type="redirectAction">articleList</result>
+        </action>
+    </package>
+</struts>
