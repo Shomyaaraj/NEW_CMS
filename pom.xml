@@ -14,6 +14,7 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
     <!-- Struts 2 Core -->
     <dependency>
       <groupId>org.apache.struts</groupId>
@@ -21,18 +22,20 @@
       <version>2.5.30</version>
     </dependency>
 
-    <!-- H2 Database -->
+    <!-- ✅ PostgreSQL Driver (H2 replace kiya) -->
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>2.1.214</version>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.6.0</version>
     </dependency>
-    <!-- JDBC -->
+
+    <!-- JDBC Connection Pool -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-dbcp2</artifactId>
       <version>2.9.0</version>
     </dependency>
+
     <!-- Servlet API -->
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -40,6 +43,7 @@
       <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
+
     <!-- JSP API -->
     <dependency>
       <groupId>javax.servlet.jsp</groupId>
@@ -47,6 +51,7 @@
       <version>2.3.3</version>
       <scope>provided</scope>
     </dependency>
+
     <!-- Bootstrap CSS (via WebJars) -->
     <dependency>
       <groupId>org.webjars</groupId>
@@ -54,7 +59,43 @@
       <version>5.3.0</version>
     </dependency>
   </dependencies>
+
   <build>
     <finalName>news-cms</finalName>
+    <plugins>
+      <!-- ✅ Webapp Runner - Railway deploy ke liye -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>copy</goal></goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.heroku</groupId>
+                  <artifactId>webapp-runner</artifactId>
+                  <version>9.0.52.1</version>
+                  <destFileName>webapp-runner.jar</destFileName>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- ✅ Maven Compiler - Java 8 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>
+```

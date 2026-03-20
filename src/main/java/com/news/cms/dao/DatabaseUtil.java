@@ -26,6 +26,25 @@ public class DatabaseUtil {
                 url = props.getProperty("db.url");
                 username = props.getProperty("db.username");
                 password = props.getProperty("db.password");
+
+                // Railway environment variable se override (production ke liye)
+                String envUrl = System.getenv("DATABASE_URL");
+                if (envUrl != null && !envUrl.isEmpty()) {
+                    // Railway/Neon format: postgres:// → jdbc:postgresql://
+                    url = envUrl
+                        .replace("postgres://", "jdbc:postgresql://")
+                        .replace("postgresql://", "jdbc:postgresql://");
+                    if (!url.contains("sslmode")) {
+                        url += "?sslmode=require";
+                    }
+                }
+
+                String envUser = System.getenv("PGUSER");
+                if (envUser != null) username = envUser;
+
+                String envPass = System.getenv("PGPASSWORD");
+                if (envPass != null) password = envPass;
+
                 Class.forName(driver);
             }
         } catch (Exception e) {
@@ -53,26 +72,40 @@ public class DatabaseUtil {
     }
 
     private static void initializeDatabase(Connection conn) {
-        try (Statement stmt = conn.createStatement()) {
-            // Read and execute schema.sql
+        try {
             InputStream schemaStream = DatabaseUtil.class.getClassLoader().getResourceAsStream("schema.sql");
             if (schemaStream != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(schemaStream));
                 StringBuilder sql = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    sql.append(line).append("\n");
+                    // Comments skip karo
+                    if (!line.trim().startsWith("--")) {
+                        sql.append(line).append("\n");
+                    }
                 }
                 reader.close();
 
-                // Execute the entire SQL as one statement
-                String fullSql = sql.toString();
-                System.out.println("Executing schema SQL: " + fullSql);
-                stmt.execute(fullSql);
+                // PostgreSQL mein multiple statements alag execute karne padte hain
+                String[] statements = sql.toString().split(";");
+                for (String statement : statements) {
+                    String trimmed = statement.trim();
+                    if (!trimmed.isEmpty()) {
+                        try (Statement stmt = conn.createStatement()) {
+                            System.out.println("Executing: " + trimmed.substring(0, Math.min(50, trimmed.length())) + "...");
+                            stmt.execute(trimmed);
+                        } catch (SQLException e) {
+                            // Already exists errors ignore karo
+                            System.err.println("Statement warning (ignored): " + e.getMessage());
+                        }
+                    }
+                }
+
                 System.out.println("Database initialized successfully!");
 
-                // Verify users were inserted
-                try (java.sql.ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users")) {
+                // Verify
+                try (Statement stmt = conn.createStatement();
+                     java.sql.ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users")) {
                     if (rs.next()) {
                         System.out.println("Users table has " + rs.getInt(1) + " records");
                     }
