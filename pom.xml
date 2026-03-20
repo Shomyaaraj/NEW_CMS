@@ -7,7 +7,9 @@
   <version>1.0-SNAPSHOT</version>
   <name>news-cms Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
   <dependencies>
+    <!-- JUnit -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -22,7 +24,7 @@
       <version>2.5.30</version>
     </dependency>
 
-    <!-- ✅ PostgreSQL Driver (H2 replace kiya) -->
+    <!-- PostgreSQL Driver (H2 replace kiya) -->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
@@ -63,7 +65,7 @@
   <build>
     <finalName>news-cms</finalName>
     <plugins>
-      <!-- ✅ Webapp Runner - Railway deploy ke liye -->
+      <!-- Webapp Runner - Railway deploy ke liye -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -85,7 +87,7 @@
         </executions>
       </plugin>
 
-      <!-- ✅ Maven Compiler - Java 8 -->
+      <!-- Maven Compiler - Java 8 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -97,5 +99,12 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- Production Profile for Railway -->
+  <profiles>
+    <profile>
+      <id>production</id>
+    </profile>
+  </profiles>
+
 </project>
-```
