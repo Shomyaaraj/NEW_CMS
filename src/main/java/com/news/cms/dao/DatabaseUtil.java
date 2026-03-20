@@ -16,41 +16,49 @@ public class DatabaseUtil {
     private static String password;
     private static boolean initialized = false;
 
-    static {
-        try {
-            Properties props = new Properties();
-            InputStream input = DatabaseUtil.class.getClassLoader().getResourceAsStream("db.properties");
-            if (input != null) {
-                props.load(input);
-                driver = props.getProperty("db.driver");
-                url = props.getProperty("db.url");
-                username = props.getProperty("db.username");
-                password = props.getProperty("db.password");
-
-                // Railway environment variable se override (production ke liye)
-                String envUrl = System.getenv("DATABASE_URL");
-                if (envUrl != null && !envUrl.isEmpty()) {
-                    // Railway/Neon format: postgres:// → jdbc:postgresql://
-                    url = envUrl
-                        .replace("postgres://", "jdbc:postgresql://")
-                        .replace("postgresql://", "jdbc:postgresql://");
-                    if (!url.contains("sslmode")) {
-                        url += "?sslmode=require";
-                    }
-                }
-
-                String envUser = System.getenv("PGUSER");
-                if (envUser != null) username = envUser;
-
-                String envPass = System.getenv("PGPASSWORD");
-                if (envPass != null) password = envPass;
-
-                Class.forName(driver);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+   static {
+    try {
+        Properties props = new Properties();
+        InputStream input = DatabaseUtil.class.getClassLoader().getResourceAsStream("db.properties");
+        if (input != null) {
+            props.load(input);
+            driver = props.getProperty("db.driver");
+            url = props.getProperty("db.url");
+            username = props.getProperty("db.username");
+            password = props.getProperty("db.password");
         }
+
+        // Environment variables se override
+        String envUrl = System.getenv("DATABASE_URL");
+        if (envUrl != null && !envUrl.isEmpty()) {
+            url = envUrl;
+            // postgres:// → jdbc:postgresql://
+            if (url.startsWith("postgres://")) {
+                url = url.replace("postgres://", "jdbc:postgresql://");
+            } else if (url.startsWith("postgresql://")) {
+                url = url.replace("postgresql://", "jdbc:postgresql://");
+            }
+            // SSL add karo agar nahi hai
+            if (!url.contains("sslmode")) {
+                url += "?sslmode=require";
+            }
+        }
+
+        String envUser = System.getenv("PGUSER");
+        if (envUser != null && !envUser.isEmpty()) username = envUser;
+
+        String envPass = System.getenv("PGPASSWORD");
+        if (envPass != null && !envPass.isEmpty()) password = envPass;
+
+        Class.forName(driver);
+
+        System.out.println("DB URL: " + url);
+        System.out.println("DB User: " + username);
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 
     public static Connection getConnection() throws SQLException {
         try {
