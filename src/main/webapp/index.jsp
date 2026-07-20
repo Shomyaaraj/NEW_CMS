@@ -5,46 +5,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News CMS</title>
+    <title>Lumina News CMS - Modern Editorial Content Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 100px 0;
-        }
-        .feature-card {
-            transition: transform 0.3s ease;
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-glass sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">📰 News CMS</a>
-            <div class="navbar-nav ms-auto">
-                <s:if test="#session.user != null">
-                    <span class="navbar-text me-3">Welcome, <s:property value="#session.user.username"/> (<s:property value="#session.user.role"/>)</span>
-                    <a class="nav-link" href="<s:url action='articleList'/>">Dashboard</a>
-                    <a class="nav-link" href="<s:url action='logout'/>">Logout</a>
-                </s:if>
-                <s:else>
-                    <a class="nav-link" href="<s:url action='login' method='input'/>">Login</a>
-                </s:else>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <span class="fs-4">📰</span> Lumina <span class="badge bg-primary fs-6 font-monospace">CMS</span>
+            </a>
+            <button class="navbar-toggler border-0 text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto align-items-center gap-2">
+                    <s:if test="#session.user != null">
+                        <span class="nav-link text-light me-2">
+                            <i class="bi bi-person-circle me-1 text-primary"></i>
+                            <s:property value="#session.user.username"/> 
+                            <span class="badge badge-published ms-1"><s:property value="#session.user.role"/></span>
+                        </span>
+                        <a class="btn btn-outline-lumina btn-sm" href="<s:url action='articleList'/>">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        </a>
+                        <a class="btn btn-danger-lumina btn-sm" href="<s:url action='logout'/>">
+                            <i class="bi bi-box-arrow-right me-1"></i> Logout
+                        </a>
+                    </s:if>
+                    <s:else>
+                        <a class="btn btn-primary-lumina" href="<s:url action='login' method='input'/>">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                        </a>
+                    </s:else>
+                </div>
             </div>
         </div>
     </nav>
 
-    <section class="hero-section">
-        <div class="container text-center">
-            <h1 class="display-4 fw-bold mb-4">News Content Management System</h1>
-            <p class="lead mb-4">Professional content management with role-based editorial workflows</p>
+    <section class="page-hero text-center py-5">
+        <div class="container">
+            <span class="badge badge-review mb-3 px-3 py-2 fs-6">
+                <i class="bi bi-stars me-1"></i> Lumina Editorial Platform
+            </span>
+            <h1 class="display-3 fw-bold mb-3">Modern News Content Management</h1>
+            <p class="lead text-secondary max-width-600 mx-auto mb-4" style="max-width: 680px;">
+                Streamline editorial workflows with deep slate glassmorphism, instant article state tracking, and role-based editorial authorization.
+            </p>
             <s:if test="#session.user == null">
-                <a href="<s:url action='login' method='input'/>" class="btn btn-light btn-lg">Get Started</a>
+                <a href="<s:url action='login' method='input'/>" class="btn btn-primary-lumina btn-lg px-4 py-3">
+                    <i class="bi bi-rocket-takeoff me-2"></i> Get Started
+                </a>
             </s:if>
+            <s:else>
+                <a href="<s:url action='articleList'/>" class="btn btn-primary-lumina btn-lg px-4 py-3">
+                    <i class="bi bi-grid-1x2 me-2"></i> Go to Newsroom Dashboard
+                </a>
+            </s:else>
         </div>
     </section>
 
@@ -52,58 +70,45 @@
         <div class="container">
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card feature-card h-100 border-0 shadow">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                <span style="font-size: 3rem;">📝</span>
-                            </div>
-                            <h5 class="card-title">Article Management</h5>
-                            <p class="card-text">Create, edit, and manage news articles with ease. Full lifecycle support from draft to publication.</p>
+                    <div class="glass-card glass-card-interactive p-4 h-100">
+                        <div class="mb-3 text-primary fs-1">
+                            <i class="bi bi-journal-richtext"></i>
                         </div>
+                        <h4 class="card-title mb-2">Editorial Workflows</h4>
+                        <p class="text-secondary mb-0">
+                            Seamless article lifecycles with Draft, Review, and Published status transitions designed for fast-paced digital newsrooms.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card feature-card h-100 border-0 shadow">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                <span style="font-size: 3rem;">🔒</span>
-                            </div>
-                            <h5 class="card-title">Role-Based Access</h5>
-                            <p class="card-text">Secure system with Admin, Editor, and Author roles. Strict editorial workflows ensure quality control.</p>
+                    <div class="glass-card glass-card-interactive p-4 h-100">
+                        <div class="mb-3 text-info fs-1">
+                            <i class="bi bi-shield-check"></i>
                         </div>
+                        <h4 class="card-title mb-2">Role Access Control</h4>
+                        <p class="text-secondary mb-0">
+                            Strict role enforcement across Admin, Editor, and Author positions to protect content integrity and publishing rights.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card feature-card h-100 border-0 shadow">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                <span style="font-size: 3rem;">⚡</span>
-                            </div>
-                            <h5 class="card-title">Workflow Automation</h5>
-                            <p class="card-text">Streamlined publishing process with draft, review, and published states. Automated status management.</p>
+                    <div class="glass-card glass-card-interactive p-4 h-100">
+                        <div class="mb-3 text-warning fs-1">
+                            <i class="bi bi-lightning-charge"></i>
                         </div>
+                        <h4 class="card-title mb-2">Cloud Database Sync</h4>
+                        <p class="text-secondary mb-0">
+                            Powered by Neon Cloud PostgreSQL with JDBC connection pooling and automated schema initialization.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="bg-light py-5">
-        <div class="container text-center">
-            <h2 class="mb-4">Ready to Manage Your Content?</h2>
-            <p class="lead mb-4">Join thousands of publishers using our CMS for efficient content management</p>
-            <s:if test="#session.user == null">
-                <a href="<s:url action='login' method='input'/>" class="btn btn-primary btn-lg">Login Now</a>
-            </s:if>
-            <s:else>
-                <a href="<s:url action='articleList'/>" class="btn btn-primary btn-lg">Go to Dashboard</a>
-            </s:else>
-        </div>
-    </section>
-
-    <footer class="bg-dark text-light py-4">
-        <div class="container text-center">
-            <p>&copy; 2024 News CMS. Built with Struts 2 & Bootstrap.</p>
+    <footer class="py-4 mt-5">
+        <div class="container text-center text-secondary">
+            <p class="mb-0 small">&copy; 2026 Lumina News CMS. Redesigned with Stitch Lumina Editorial System.</p>
         </div>
     </footer>
 

@@ -8,155 +8,150 @@
     <title>Dashboard - News CMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .dashboard-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 0;
-            margin-bottom: 30px;
-        }
-        .stat-card {
-            border: none;
-            border-radius: 15px;
-            transition: transform 0.3s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        .action-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-        }
-    </style>
+    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">📰 News CMS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="<s:url action='articleList'/>">
+                <span class="fs-4">📰</span> News CMS
+            </a>
+            <button class="navbar-toggler border-0 text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-2"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav ms-auto">
-                    <span class="navbar-text me-3">Welcome, <s:property value="#session.user.username"/> (<s:property value="#session.user.role"/>)</span>
-                    <a class="nav-link" href="<s:url action='articleList'/>">Articles</a>
-                    <a class="nav-link" href="<s:url action='logout'/>">Logout</a>
+                <div class="navbar-nav me-auto ms-lg-4">
+                    <a class="nav-link active" href="<s:url action='articleList'/>">
+                        <i class="bi bi-grid me-1"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="<s:url action='articleCreate'/>">
+                        <i class="bi bi-plus-circle me-1"></i> New Article
+                    </a>
+                </div>
+                <div class="navbar-nav align-items-center gap-2">
+                    <span class="nav-link text-light me-2">
+                        <i class="bi bi-person-circle me-1 text-primary"></i>
+                        <s:property value="#session.user.username"/> 
+                        <span class="badge badge-published ms-1"><s:property value="#session.user.role"/></span>
+                    </span>
+                    <a class="btn btn-danger-custom btn-sm" href="<s:url action='logout'/>">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="dashboard-header">
+    <section class="page-hero py-4">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="display-5 fw-bold mb-3">Dashboard</h1>
-                    <p class="lead mb-0">Manage your content efficiently with our powerful CMS</p>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <h1 class="display-6 fw-extrabold mb-1">Newsroom Dashboard</h1>
+                    <p class="text-secondary mb-0">Manage your editorial workflow, content creation, and publishing operations.</p>
                 </div>
-                <div class="col-md-4 text-end">
-                    <a href="<s:url action='articleCreate'/>" class="btn btn-light btn-lg">
-                        <i class="bi bi-plus-circle me-2"></i>Create Article
+                <div>
+                    <a href="<s:url action='articleCreate'/>" class="btn btn-gradient-primary">
+                        <i class="bi bi-plus-lg me-2"></i>Create New Article
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="container">
+    <div class="container mb-5">
+        <!-- KPI Metrics Grid -->
         <div class="row g-4 mb-5">
             <div class="col-md-3">
-                <div class="card stat-card shadow">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <i class="bi bi-file-earmark-text display-4 text-primary"></i>
-                        </div>
-                        <h3 class="card-title">Articles</h3>
-                        <p class="card-text">Manage your news articles</p>
-                        <a href="<s:url action='articleList'/>" class="btn btn-primary">View All</a>
+                <div class="glass-card glass-card-interactive p-4 text-center">
+                    <div class="mb-2 text-primary fs-1">
+                        <i class="bi bi-file-earmark-richtext"></i>
                     </div>
+                    <h6 class="text-secondary small text-uppercase mono-font mb-1">All Articles</h6>
+                    <a href="<s:url action='articleList'/>" class="btn btn-outline-custom btn-sm mt-3 w-100">
+                        View Articles
+                    </a>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card stat-card shadow">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <i class="bi bi-pencil-square display-4 text-success"></i>
-                        </div>
-                        <h3 class="card-title">Create</h3>
-                        <p class="card-text">Write new articles</p>
-                        <a href="<s:url action='articleCreate'/>" class="btn btn-success">Create New</a>
+                <div class="glass-card glass-card-interactive p-4 text-center">
+                    <div class="mb-2 text-warning fs-1">
+                        <i class="bi bi-pencil-square"></i>
                     </div>
+                    <h6 class="text-secondary small text-uppercase mono-font mb-1">New Draft</h6>
+                    <a href="<s:url action='articleCreate'/>" class="btn btn-outline-custom btn-sm mt-3 w-100">
+                        Start Draft
+                    </a>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card stat-card shadow">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <i class="bi bi-check-circle display-4 text-warning"></i>
-                        </div>
-                        <h3 class="card-title">Review</h3>
-                        <p class="card-text">Articles pending review</p>
-                        <a href="<s:url action='articleList'/>" class="btn btn-warning">Review</a>
+                <div class="glass-card glass-card-interactive p-4 text-center">
+                    <div class="mb-2 text-info fs-1">
+                        <i class="bi bi-clock-history"></i>
                     </div>
+                    <h6 class="text-secondary small text-uppercase mono-font mb-1">Review Submissions</h6>
+                    <a href="<s:url action='articleList'/>" class="btn btn-outline-custom btn-sm mt-3 w-100">
+                        Review Feed
+                    </a>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card stat-card shadow">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <i class="bi bi-globe display-4 text-info"></i>
-                        </div>
-                        <h3 class="card-title">Publish</h3>
-                        <p class="card-text">Published content</p>
-                        <a href="<s:url action='articleList'/>" class="btn btn-info">Published</a>
+                <div class="glass-card glass-card-interactive p-4 text-center">
+                    <div class="mb-2 text-success fs-1">
+                        <i class="bi bi-check2-circle"></i>
                     </div>
+                    <h6 class="text-secondary small text-uppercase mono-font mb-1">Published Content</h6>
+                    <a href="<s:url action='articleList'/>" class="btn btn-outline-custom btn-sm mt-3 w-100">
+                        Published Feed
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card action-card text-white">
-                    <div class="card-body">
-                        <h4 class="card-title mb-3">Quick Actions</h4>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <h6><i class="bi bi-file-earmark-plus me-2"></i>Content Creation</h6>
-                                <p class="mb-2">Create and edit articles with our rich editor</p>
-                                <a href="<s:url action='articleCreate'/>" class="btn btn-light btn-sm">Start Writing</a>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="glass-card p-4 h-100">
+                    <h4 class="mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-lightning-charge text-warning"></i> Quick Editorial Actions
+                    </h4>
+                    <p class="text-secondary mb-4">Manage article lifecycles, publish pending reviews, or write new content.</p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 border border-secondary border-opacity-25 rounded-3 bg-dark">
+                                <h6 class="text-light mb-2"><i class="bi bi-pen me-2 text-primary"></i>Write Article</h6>
+                                <p class="text-secondary small mb-3">Compose articles and assign category tags.</p>
+                                <a href="<s:url action='articleCreate'/>" class="btn btn-gradient-primary btn-sm">Create Article</a>
                             </div>
-                            <div class="col-md-6">
-                                <h6><i class="bi bi-list-check me-2"></i>Workflow Management</h6>
-                                <p class="mb-2">Manage article lifecycles and publishing</p>
-                                <a href="<s:url action='articleList'/>" class="btn btn-light btn-sm">Manage Articles</a>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 border border-secondary border-opacity-25 rounded-3 bg-dark">
+                                <h6 class="text-light mb-2"><i class="bi bi-card-checklist me-2 text-info"></i>Manage Feed</h6>
+                                <p class="text-secondary small mb-3">Edit, review, or delete existing articles.</p>
+                                <a href="<s:url action='articleList'/>" class="btn btn-outline-custom btn-sm">Go to Feed</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Your Role</h5>
+
+            <div class="col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <h4 class="mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-person-badge text-primary"></i> Session Info
+                    </h4>
+                    <div class="p-3 border border-secondary border-opacity-25 rounded-3 bg-dark mb-3">
+                        <span class="text-secondary small d-block">Username</span>
+                        <span class="fs-5 fw-bold text-light"><s:property value="#session.user.username"/></span>
                     </div>
-                    <div class="card-body">
-                        <p class="mb-2"><strong>Role:</strong> <s:property value="#session.user.role"/></p>
+                    <div class="p-3 border border-secondary border-opacity-25 rounded-3 bg-dark">
+                        <span class="text-secondary small d-block mb-1">Role & Privileges</span>
                         <s:if test="#session.user.role == 'ADMIN'">
-                            <div class="alert alert-success small">
-                                <i class="bi bi-shield-check me-1"></i>Full system access
-                            </div>
+                            <span class="badge badge-published fs-6">ADMIN (Full Access)</span>
                         </s:if>
                         <s:elseif test="#session.user.role == 'EDITOR'">
-                            <div class="alert alert-info small">
-                                <i class="bi bi-pencil me-1"></i>Can publish and edit
-                            </div>
+                            <span class="badge badge-review fs-6">EDITOR (Review & Publish)</span>
                         </s:elseif>
                         <s:else>
-                            <div class="alert alert-warning small">
-                                <i class="bi bi-person me-1"></i>Author privileges
-                            </div>
+                            <span class="badge badge-draft fs-6">AUTHOR (Writer)</span>
                         </s:else>
                     </div>
                 </div>

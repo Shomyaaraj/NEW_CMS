@@ -1,135 +1,139 @@
 # News CMS
 
-A content management system for managing news articles and user authentication built with Apache Struts 2 and PostgreSQL. Easily deployable with Docker and supports Railway/Heroku deployment.
+A modern, high-performance Content Management System (CMS) built with **Apache Struts 2** (v2.5.30), **PostgreSQL** (with Neon Cloud & embedded H2 fallback), **Bootstrap 5**, and a sleek **Indigo/Purple Glassmorphism** editorial UI.
 
-## Overview
+---
 
-News CMS is a web application that provides functionality for:
-- User authentication (login/logout)
-- Article management (create, read, update, delete)
-- Dashboard interface for content management
-- RESTful API routes for article and user operations
+## 🌟 Overview
 
-## Technology Stack
+**News CMS** is an enterprise-ready editorial web application designed for fast-paced digital newsrooms. It features:
+- **Role-Based Access Control (RBAC)** for `ADMIN`, `EDITOR`, and `AUTHOR` roles.
+- **Full Article Lifecycle Management** (Draft, Submit for Review, Publish, Edit, Delete).
+- **Modern Glassmorphic Editorial Dashboard** with real-time KPI metrics and neon status indicators.
+- **Dual Database Architecture**: Auto-connects to Neon Cloud PostgreSQL with seamless automatic fallback to embedded in-memory **H2 Database** for offline local development.
+- **Production Deployment Ready**: Docker multi-stage container build and Railway / Heroku `webapp-runner` support.
 
-- **Framework**: Apache Struts 2 (v2.5.30)
-- **Database**: PostgreSQL (with Neon cloud support)
-- **Build Tool**: Maven
-- **Language**: Java 11+
-- **Web Server**: Webapp Runner (supports Railway, Heroku deployment)
-- **Frontend**: JSP, Bootstrap 5
-- **Database Connection**: Apache Commons DBCP2 (v2.9.0)
-- **Containerization**: Docker with multi-stage builds
+---
 
-## Project Structure
+## 🛠 Technology Stack
+
+- **Backend Framework**: Apache Struts 2 (`v2.5.30`)
+- **Language & JDK**: Java 11+ (Compatible with Java 8/11/21)
+- **Database Engine**: PostgreSQL (`v42.6.0` driver) / H2 In-Memory (`v2.1.214`)
+- **Connection Pool**: Apache Commons DBCP2 (`v2.9.0`)
+- **Build System**: Apache Maven
+- **Frontend & Design System**: JSP, Bootstrap 5 (`v5.3.0`), Bootstrap Icons, Custom Indigo/Purple Glassmorphism CSS
+- **Application Server / Runner**: Apache Tomcat 9 (`webapp-runner v9.0.52.1`)
+- **Containerization**: Docker (Multi-stage build)
+
+---
+
+## 📁 Project Structure
 
 ```
 news-cms/
 ├── src/main/
 │   ├── java/com/news/cms/
-│   │   ├── action/              # Struts 2 Action classes
-│   │   │   ├── ArticleAction.java
-│   │   │   └── LoginAction.java
-│   │   ├── dao/                 # Data Access Objects
-│   │   │   ├── ArticleDAO.java
-│   │   │   ├── UserDAO.java
-│   │   │   └── DatabaseUtil.java
-│   │   └── model/               # Entity models
-│   │       ├── Article.java
-│   │       └── User.java
+│   │   ├── action/              # Struts 2 Action Controllers
+│   │   │   ├── ArticleAction.java # CRUD, publish & delete workflow logic
+│   │   │   └── LoginAction.java   # Authentication & session handling
+│   │   ├── dao/                 # Data Access Objects & Utilities
+│   │   │   ├── ArticleDAO.java   # SQL queries for article operations
+│   │   │   ├── UserDAO.java      # User lookup & authentication
+│   │   │   └── DatabaseUtil.java # Connection manager & H2/Neon fallback
+│   │   └── model/               # Domain Entity Models
+│   │       ├── Article.java     # Article entity bean
+│   │       └── User.java        # User entity bean
 │   ├── resources/
-│   │   ├── db.properties        # Database configuration
-│   │   ├── schema.sql           # Database schema
-│   │   └── struts.xml           # Struts 2 configuration
+│   │   ├── db.properties        # Primary database credentials
+│   │   ├── schema.sql           # ANSI SQL schema & seed user initialization
+│   │   └── struts.xml           # Struts 2 mappings & theme simple config
 │   └── webapp/
-│       ├── index.jsp
+│       ├── css/
+│       │   └── style.css        # Lumina Indigo/Purple Glassmorphic theme
+│       ├── index.jsp            # Landing & marketing showcase page
 │       └── WEB-INF/
-│           ├── web.xml          # Deployment descriptor
-│           └── jsp/             # JSP view templates
-│               ├── login.jsp
-│               ├── dashboard.jsp
-│               ├── articleList.jsp
-│               └── articleForm.jsp
-├── pom.xml                      # Maven configuration
-└── README.md                    # This file
+│           ├── web.xml          # Web application deployment descriptor
+│           └── jsp/             # Internal View Templates
+│               ├── login.jsp        # Authentication sign-in form
+│               ├── dashboard.jsp    # Newsroom dashboard & KPI widgets
+│               ├── articleList.jsp  # Article feed & management view
+│               └── articleForm.jsp  # Article creation & edit form
+├── Dockerfile                   # Multi-stage Docker build configuration
+├── Procfile                     # Webapp-runner execution script for Railway/Heroku
+├── pom.xml                      # Maven project definition & dependencies
+└── README.md                    # Project documentation
 ```
 
-## Features
+---
 
-### Authentication
-- User login/logout functionality
-- Session management
-- Dashboard access control
+## ⚡ Features & Workflow
 
-### Article Management
-- View all articles
-- Create new articles
-- Edit existing articles
-- Delete articles
-- List articles with pagination support
+### 1. User Authentication & Session Management
+- Role-based session tracking (`ADMIN`, `EDITOR`, `AUTHOR`).
+- Secure logout and login validation.
+- Session authorization guards protecting action routes.
 
-## Prerequisites
+### 2. Article Editorial Lifecycle
+- **Draft**: Work-in-progress state for authors.
+- **Review**: Submitted to editorial queue for review.
+- **Publish**: Published state managed by Admin and Editor roles.
+- **Edit & Delete**: Edit and delete operations restricted to authorized users.
 
-- Java Development Kit (JDK) 8 or higher
-- Maven 3.6.0 or higher
-- Apache Tomcat or similar Java application server
+### 3. Demo Credentials
+The database auto-seeds 3 default accounts on initial launch:
 
-## Installation
+| Role | Username | Password | Permissions |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin` | `admin123` | Full access (Create, Edit, Publish, Delete any article) |
+| **Editor** | `editor` | `editor123` | Editorial access (Create, Edit, Publish, Delete articles) |
+| **Author** | `author` | `author123` | Creator access (Create & Edit personal draft articles) |
 
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd news-cms
-```
+---
 
-### 2. Set Up Environment Variables
-Create a `.env` file or set the following environment variables:
-```bash
-DATABASE_URL=jdbc:postgresql://your-host:5432/your-db
-DATABASE_USER=your_username
-DATABASE_PASSWORD=your_password
-```
+## 🚀 Quick Start for Local Development
 
-For **Neon PostgreSQL**, use:
-```bash
-DATABASE_URL=jdbc:postgresql://ep-xxx.aws.neon.tech/neondb?sslmode=require
-DATABASE_USER=neondb_owner
-DATABASE_PASSWORD=your_password
-```
+### 1. Prerequisites
+- Java JDK 8, 11, or 21 installed.
+- Maven 3.6+ installed (or MavenWrapper).
 
-Update `src/main/resources/db.properties` with your database credentials.
-
-### 3. Build the Project
+### 2. Build & Package
 ```bash
 mvn clean package
 ```
 
-### 4a. Deploy Locally
-Deploy the WAR file to your local Tomcat server:
+### 3. Run Locally with `webapp-runner`
 ```bash
-cp target/news-cms.war $CATALINA_HOME/webapps/
+java -jar target/dependency/webapp-runner.jar --port 8080 target/news-cms
 ```
+Open **[http://localhost:8080/](http://localhost:8080/)** in your browser.
 
-Then access the application:
-```
-http://localhost:8080/news-cms/
-```
+> **Note**: If remote PostgreSQL connection credentials fail or are unreachable, `DatabaseUtil` automatically falls back to an embedded in-memory H2 database, ensuring zero-config instant local execution.
 
-### 4b. Deploy with Docker
-Build and run the Docker image:
+---
+
+## 🐳 Docker Deployment
+
+Build and run the application container using Docker:
+
 ```bash
+# Build Docker image
 docker build -t news-cms .
+
+# Run container
 docker run -p 8080:8080 \
-  -e DATABASE_URL="jdbc:postgresql://your-host/your-db?sslmode=require" \
-  -e DATABASE_USER="your_username" \
-  -e DATABASE_PASSWORD="your_password" \
+  -e DATABASE_URL="jdbc:postgresql://your-host:5432/your-db?sslmode=require" \
+  -e PGUSER="your_username" \
+  -e PGPASSWORD="your_password" \
   news-cms
 ```
 
-### 4c. Deploy to Railway/Heroku
-1. Ensure you have the Railway or Heroku CLI installed
-2. Configure your PostgreSQL database connection in environment variables
-3. Deploy using:
+---
+
+## ☁️ Cloud Deployment (Railway / Heroku)
+
+Deploy automatically using the provided `Procfile`:
+
 ```bash
 # For Railway
 railway up
@@ -138,206 +142,25 @@ railway up
 git push heroku main
 ```
 
-The application will be available at the provided Railway/Heroku URL.
+---
 
-## Database Configuration
+## 🔗 Action Mappings & API Routes
 
-The application connects to PostgreSQL and automatically initializes the schema on startup using `schema.sql`.
+### Authentication Routes
+- `GET/POST /login!input` — Render login page
+- `POST /login` — Authenticate credentials
+- `GET /logout` — Invalidate user session
 
-Database properties are configured in `src/main/resources/db.properties`:
-```properties
-db.driver=org.postgresql.Driver
-db.url=jdbc:postgresql://host:port/database?sslmode=require
-db.username=your_username
-db.password=your_password
-```
+### Article Management Routes
+- `GET /articleList` — View articles feed
+- `GET /articleCreate` — Open new article form (Requires Login)
+- `POST /articleSave` — Save new or updated article
+- `GET /articleEdit?id={id}` — Open edit form (Requires Ownership/Role)
+- `GET /articlePublish?id={id}` — Publish article (Requires Admin/Editor Role)
+- `GET /articleDelete?id={id}` — Delete article (Requires Ownership/Role)
 
-### Database Schema
-- **Users Table**: Stores user credentials and information
-- **Articles Table**: Stores article content, author, and metadata
+---
 
-### Using Neon PostgreSQL
-For **Neon** cloud database integration:
-1. Create a database on [Neon Console](https://console.neon.tech/)
-2. Copy the connection string and update `db.properties`
-3. Ensure `sslmode=require` is set in the connection URL for secure connection
-4. The schema will be initialized automatically on first run
+## 📄 License
 
-## Configuration Files
-
-### struts.xml
-Defines the Struts 2 action mappings and result configurations:
-- Login action
-- Logout action
-- Article listing, creation, update, and deletion actions
-
-### web.xml
-Deployment descriptor that configures:
-- Struts 2 filter mapping
-- Welcome file configuration
-- Display name
-
-### db.properties
-Database connection properties:
-- Database URL
-- Driver class
-- Connection pool settings
-
-## API Routes
-
-### Authentication
-- `GET/POST /login!input` - Display login form
-- `GET/POST /login` - Process login
-- `GET /logout` - Logout user
-
-### Articles
-- `GET /articleList` - View all articles
-- `GET /articleCreate` - Display article creation form
-- `POST /articleSave` - Save new/updated article
-- `GET /articleEdit` - Display article edit form
-- `GET /articleDelete` - Delete article
-
-## Development
-
-### Building
-```bash
-mvn clean package
-```
-
-### Running Tests
-```bash
-mvn test
-```
-
-### Running with Embedded Server (for development)
-```bash
-mvn tomcat7:run
-```
-
-### Quick Start for Local Development
-1. Update `db.properties` with your local PostgreSQL credentials
-2. Create a database: `createdb news_cms`
-3. Run: `mvn clean package && mvn tomcat7:run`
-4. Access: `http://localhost:8080/news-cms/`
-
-## Deployment Options
-
-### Local Development
-- Use Maven Tomcat plugin with `mvn tomcat7:run`
-- Requires local PostgreSQL or compatible database
-
-### Docker Deployment
-- Multi-stage Docker build included (Dockerfile)
-- Optimized image size with separate build and runtime stages
-- Pass database credentials via environment variables
-
-### Cloud Deployment (Railway/Heroku)
-- Automatic deployment via `Procfile`
-- Uses webapp-runner for Java web application hosting
-- Configure database connection via platform environment variables
-- Application runs on PORT environment variable (default 8080)
-
-## Directory Overview
-
-- **action/**: Contains Struts 2 Action classes that handle HTTP requests
-- **dao/**: Data Access Objects for database operations
-- **model/**: Java domain objects (Article, User)
-- **resources/**: Configuration files and SQL scripts
-- **webapp/**: Web application files (JSP pages, static resources)
-
-## Dependencies
-
-Main dependencies managed through Maven:
-- Apache Struts 2 Core (v2.5.30)
-- PostgreSQL JDBC Driver (v42.6.0)
-- Apache Commons DBCP2 (v2.9.0) - Connection pooling
-- Servlet API (v4.0.1)
-- JSP API (v2.3.3)
-- Bootstrap 5 (via WebJars v5.3.0)
-- JUnit (v3.8.1) - Testing
-
-### Java Version Requirements
-- JDK 11 or higher recommended
-- Maven 3.6.0 or higher
-
-## Troubleshooting
-
-### Database Connection Issues
-- Verify PostgreSQL credentials in `db.properties`
-- Check if `sslmode=require` is needed (required for Neon)
-- Ensure PostgreSQL driver (postgresql-42.6.0.jar) is in classpath
-- Verify the database server is running and accessible
-- For Neon, ensure network access is allowed in security settings
-
-### Port Already in Use
-- Local development: Change port with `mvn tomcat7:run -Dmaven.tomcat.port=8081`
-- Docker: Use different port mapping: `docker run -p 9090:8080`
-- Railway/Heroku: Platform automatically assigns PORT environment variable
-
-### Page Not Found Errors
-- Verify the WAR file is deployed to the correct location
-- Check Struts 2 filter mappings in web.xml
-- Review action mappings in struts.xml
-- Ensure the application context is correct
-
-### Session-Related Issues
-- Clear browser cookies and session data
-- Check application server session timeout settings
-- Verify HttpSession configuration in actions
-- For Railway/Heroku, ensure session persistence is configured
-
-### Docker Build Issues
-- Use `docker build --no-cache` to force fresh build
-- Ensure Maven dependencies are downloadable from repository
-- Check Java and Maven versions match requirements
-
-### Missing Database Schema
-- Run `schema.sql` manually if not auto-initialized
-- Check application logs for SQL initialization errors
-- Verify database user has CREATE TABLE permissions
-
-## Contributing
-
-1. Create a feature branch
-2. Commit your changes
-3. Push to the repository
-
-## License
-
-[Add your license information here]
-
-## Support & Resources
-
-- **Struts 2 Documentation**: https://struts.apache.org/
-- **PostgreSQL Documentation**: https://www.postgresql.org/docs/
-- **Neon PostgreSQL**: https://neon.tech/
-- **Railway Documentation**: https://docs.railway.app/
-- **Heroku Java Support**: https://devcenter.heroku.com/categories/java
-
-## Version History
-
-### v1.0-SNAPSHOT
-- Initial release
-- User authentication system
-- Article CRUD operations
-- PostgreSQL integration
-- Docker and Railway deployment support
-4. Submit a pull request
-
-## License
-
-[Specify your license here]
-
-## Support
-
-For issues or questions, please create an issue in the repository or contact the development team.
-
-## Future Enhancements
-
-- [ ] Implement role-based access control (RBAC)
-- [ ] Add article search functionality
-- [ ] Implement article comments system
-- [ ] Add image upload support
-- [ ] Create REST API endpoints
-- [ ] Implement caching layer
-- [ ] Add audit logging
+This project is open-source under the MIT License.

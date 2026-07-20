@@ -61,22 +61,31 @@ public class DatabaseUtil {
 }
 
     public static Connection getConnection() throws SQLException {
+        Connection conn = null;
         try {
-            System.out.println("Attempting to connect to database with URL: " + url);
-            Connection conn = DriverManager.getConnection(url, username, password);
-            System.out.println("Database connection established successfully");
-
-            if (!initialized) {
-                System.out.println("Database not initialized yet, initializing...");
-                initializeDatabase(conn);
-                initialized = true;
+            System.out.println("Attempting connection to primary DB: " + url);
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url, username, password);
+            System.out.println("Primary PostgreSQL database connection established successfully.");
+        } catch (Exception e) {
+            System.err.println("Primary DB connection failed (" + e.getMessage() + "). Falling back to embedded H2 database...");
+            try {
+                Class.forName("org.h2.Driver");
+                String h2Url = "jdbc:h2:mem:newscms;DB_CLOSE_DELAY=-1;MODE=PostgreSQL";
+                conn = DriverManager.getConnection(h2Url, "sa", "");
+                System.out.println("Embedded H2 in-memory database connection established successfully!");
+            } catch (Exception h2Ex) {
+                System.err.println("H2 fallback connection failed: " + h2Ex.getMessage());
+                throw new SQLException("Failed to establish any database connection", h2Ex);
             }
-            return conn;
-        } catch (SQLException e) {
-            System.err.println("Failed to get database connection: " + e.getMessage());
-            e.printStackTrace();
-            throw e;
         }
+
+        if (!initialized) {
+            System.out.println("Database schema initializing...");
+            initializeDatabase(conn);
+            initialized = true;
+        }
+        return conn;
     }
 
     private static void initializeDatabase(Connection conn) {
@@ -94,13 +103,38 @@ public class DatabaseUtil {
                 }
                 reader.close();
 
-                // PostgreSQL mein multiple statements alag execute karne padte hain
-                String[] statements = sql.toString().split(";");
+                java.util.List<String> statements = new java.util.ArrayList<>();
+                StringBuilder currentStmt = new StringBuilder();
+                boolean inDollarQuote = false;
+
+                String fullSql = sql.toString();
+                String[] lines = fullSql.split("\n");
+
+                for (String l : lines) {
+                    int idx = 0;
+                    while ((idx = l.indexOf("$$", idx)) != -1) {
+                        inDollarQuote = !inDollarQuote;
+                        idx += 2;
+                    }
+
+                    currentStmt.append(l).append("\n");
+                    if (!inDollarQuote && l.trim().endsWith(";")) {
+                        statements.add(currentStmt.toString());
+                        currentStmt.setLength(0);
+                    }
+                }
+                if (currentStmt.length() > 0 && !currentStmt.toString().trim().isEmpty()) {
+                    statements.add(currentStmt.toString());
+                }
+
                 for (String statement : statements) {
                     String trimmed = statement.trim();
+                    if (trimmed.endsWith(";")) {
+                        trimmed = trimmed.substring(0, trimmed.length() - 1).trim();
+                    }
                     if (!trimmed.isEmpty()) {
                         try (Statement stmt = conn.createStatement()) {
-                            System.out.println("Executing: " + trimmed.substring(0, Math.min(50, trimmed.length())) + "...");
+                            System.out.println("Executing SQL statement: " + trimmed.substring(0, Math.min(50, trimmed.length())).replace('\n', ' ') + "...");
                             stmt.execute(trimmed);
                         } catch (SQLException e) {
                             // Already exists errors ignore karo

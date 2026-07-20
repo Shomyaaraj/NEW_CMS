@@ -1,0 +1,230 @@
+/* ============================================================
+   News CMS - Modern Indigo & Purple Glassmorphism Theme
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --bg-base: #0b132b;
+    --bg-surface: #1c2541;
+    --bg-card: rgba(28, 37, 65, 0.85);
+    --border-glass: rgba(255, 255, 255, 0.12);
+    --border-glass-focus: #818cf8;
+    
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    /* Semantic Status Badges */
+    --status-draft-bg: rgba(245, 158, 11, 0.2);
+    --status-draft-text: #fbbf24;
+    --status-draft-border: rgba(245, 158, 11, 0.4);
+    
+    --status-review-bg: rgba(6, 182, 212, 0.2);
+    --status-review-text: #38bdf8;
+    --status-review-border: rgba(6, 182, 212, 0.4);
+    
+    --status-published-bg: rgba(16, 185, 129, 0.2);
+    --status-published-text: #34d399;
+    --status-published-border: rgba(16, 185, 129, 0.4);
+}
+
+body {
+    background-color: var(--bg-base);
+    background-image: 
+        radial-gradient(circle at 15% 15%, rgba(102, 126, 234, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(118, 75, 162, 0.18) 0%, transparent 45%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.mono-font {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Glassmorphism Card Container */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.glass-card-interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+    border-color: rgba(129, 140, 248, 0.4);
+}
+
+/* Navigation Header */
+.navbar-custom {
+    background: rgba(11, 19, 43, 0.9) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-glass);
+    padding: 0.9rem 0;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #ffffff !important;
+}
+
+.nav-link {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+    padding: 0.5rem 1rem !important;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Hero Header */
+.page-hero {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+    border-bottom: 1px solid var(--border-glass);
+    padding: 3rem 0;
+    margin-bottom: 2.5rem;
+}
+
+/* Form Controls - Clean Alignment & Contrast */
+.form-control-custom, .form-select-custom {
+    background: #0b132b !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 0.8rem 1.1rem !important;
+    font-size: 1rem !important;
+    width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s ease !important;
+}
+
+.form-control-custom:focus, .form-select-custom:focus {
+    border-color: #818cf8 !important;
+    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.25) !important;
+    outline: none !important;
+}
+
+.form-control-custom::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Buttons */
+.btn-gradient-primary {
+    background: var(--primary-gradient);
+    color: #ffffff !important;
+    border: none;
+    font-weight: 700;
+    border-radius: 12px;
+    padding: 0.7rem 1.5rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.25s ease;
+}
+
+.btn-gradient-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    color: #ffffff !important;
+}
+
+.btn-gradient-accent {
+    background: var(--accent-gradient);
+    color: #ffffff !important;
+    border: none;
+    font-weight: 700;
+    border-radius: 12px;
+    padding: 0.7rem 1.5rem;
+    box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+    transition: all 0.25s ease;
+}
+
+.btn-outline-custom {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff !important;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-custom:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-danger-custom {
+    background: rgba(239, 68, 68, 0.18);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5 !important;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.btn-danger-custom:hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.6);
+    color: #ffffff !important;
+}
+
+/* Status Badges */
+.badge-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.4em 0.85em;
+    border-radius: 9999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.badge-draft {
+    background-color: var(--status-draft-bg);
+    color: var(--status-draft-text);
+    border: 1px solid var(--status-draft-border);
+}
+
+.badge-review {
+    background-color: var(--status-review-bg);
+    color: var(--status-review-text);
+    border: 1px solid var(--status-review-border);
+}
+
+.badge-published {
+    background-color: var(--status-published-bg);
+    color: var(--status-published-text);
+    border: 1px solid var(--status-published-border);
+}
+
+footer {
+    border-top: 1px solid var(--border-glass);
+    background: rgba(11, 19, 43, 0.95);
+}

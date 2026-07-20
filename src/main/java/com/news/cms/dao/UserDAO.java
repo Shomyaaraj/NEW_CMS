@@ -14,7 +14,7 @@ public class UserDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
-            System.out.println("Authenticating user: " + username + " with password: " + password);
+            System.out.println("Authenticating user: " + username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 User user = new User();

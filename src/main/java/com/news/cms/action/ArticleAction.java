@@ -21,15 +21,29 @@ public class ArticleAction extends ActionSupport {
     }
 
     public String create() {
+        HttpSession session = ServletActionContext.getRequest().getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return LOGIN;
+        }
         article = new Article();
         return SUCCESS;
     }
 
     public String edit() {
+        HttpSession session = ServletActionContext.getRequest().getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return LOGIN;
+        }
         ArticleDAO articleDAO = new ArticleDAO();
         article = articleDAO.getArticleById(id);
         if (article == null) {
             addActionError("Article not found");
+            return ERROR;
+        }
+        if (article.getAuthorId() != user.getId() && !"ADMIN".equals(user.getRole()) && !"EDITOR".equals(user.getRole())) {
+            addActionError("You don't have permission to edit this article");
             return ERROR;
         }
         return SUCCESS;
@@ -42,16 +56,26 @@ public class ArticleAction extends ActionSupport {
             return LOGIN;
         }
 
+        if (article == null) {
+            addActionError("Invalid article data");
+            return ERROR;
+        }
+
         ArticleDAO articleDAO = new ArticleDAO();
         if (article.getId() == 0) {
             // New article
             article.setAuthorId(user.getId());
-            article.setStatus("DRAFT");
+            if (article.getStatus() == null || article.getStatus().isEmpty()) {
+                article.setStatus("DRAFT");
+            }
             articleDAO.saveArticle(article);
         } else {
             // Update existing
             Article existing = articleDAO.getArticleById(article.getId());
             if (existing != null && (existing.getAuthorId() == user.getId() || "ADMIN".equals(user.getRole()) || "EDITOR".equals(user.getRole()))) {
+                if (article.getStatus() == null || article.getStatus().isEmpty()) {
+                    article.setStatus(existing.getStatus());
+                }
                 articleDAO.updateArticle(article);
             } else {
                 addActionError("You don't have permission to edit this article");
@@ -75,13 +99,36 @@ public class ArticleAction extends ActionSupport {
 
         ArticleDAO articleDAO = new ArticleDAO();
         Article existing = articleDAO.getArticleById(id);
-        if (existing != null && "REVIEW".equals(existing.getStatus())) {
+        if (existing != null) {
             articleDAO.publishArticle(id);
         } else {
-            addActionError("Article not found or not in review status");
+            addActionError("Article not found");
             return ERROR;
         }
         return SUCCESS;
+    }
+
+    public String delete() {
+        HttpSession session = ServletActionContext.getRequest().getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return LOGIN;
+        }
+
+        ArticleDAO articleDAO = new ArticleDAO();
+        Article existing = articleDAO.getArticleById(id);
+        if (existing == null) {
+            addActionError("Article not found");
+            return ERROR;
+        }
+
+        if (existing.getAuthorId() == user.getId() || "ADMIN".equals(user.getRole()) || "EDITOR".equals(user.getRole())) {
+            articleDAO.deleteArticle(id);
+            return SUCCESS;
+        } else {
+            addActionError("You don't have permission to delete this article");
+            return ERROR;
+        }
     }
 
     // Getters and Setters

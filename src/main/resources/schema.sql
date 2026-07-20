@@ -44,34 +44,13 @@ CREATE TRIGGER update_articles_updated_at
 -- (Production mein password hashing zaroor karna!)
 -- =============================================
 INSERT INTO users (username, password, role) 
-VALUES ('admin', 'admin123', 'ADMIN')
-ON CONFLICT (username) DO NOTHING;
+SELECT 'admin', 'admin123', 'ADMIN'
+WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
 
 INSERT INTO users (username, password, role) 
-VALUES ('editor', 'editor123', 'EDITOR')
-ON CONFLICT (username) DO NOTHING;
+SELECT 'editor', 'editor123', 'EDITOR'
+WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'editor');
 
 INSERT INTO users (username, password, role) 
-VALUES ('author', 'author123', 'AUTHOR')
-ON CONFLICT (username) DO NOTHING;
-```
-
----
-
-### H2 → PostgreSQL — Kya Badla:
-
-| H2 | PostgreSQL (Neon) | Reason |
-|---|---|---|
-| `INT AUTO_INCREMENT` | `SERIAL` | PostgreSQL ka auto-increment |
-| `ON UPDATE CURRENT_TIMESTAMP` | Trigger banaya | PostgreSQL directly support nahi karta |
-| `INSERT INTO` | `INSERT INTO ... ON CONFLICT DO NOTHING` | Duplicate insert error avoid karne ke liye |
-
----
-
-### Ab Neon Setup karo:
-
-1. [neon.tech](https://neon.tech) pe **free account** banao
-2. **New Project** create karo
-3. Dashboard pe **Connection String** milega kuch aisa:
-```
-   postgresql://user:password@ep-xxx.us-east-2.aws.neon.tech/neondb
+SELECT 'author', 'author123', 'AUTHOR'
+WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'author');
